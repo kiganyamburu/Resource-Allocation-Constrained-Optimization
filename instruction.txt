@@ -1,0 +1,91 @@
+Assignment #4 Resource Allocation & Constrained Optimization
+
+
+
+The Heckscher-Ohlin (H-O) model predicts that countries export goods that intensively use their abundant factors of production (labor, capital, land, human capital) and import goods that use their scarce factors.
+
+In this assignment, you will:
+
+Test the intuition of the H-O model using real macroeconomic data
+Interpret whether observed trade patterns align with theory
+Critically evaluate the model’s assumptions, limitations, and relevance
+Compare the H-O framework to alternative trade theories
+You are expected to use GenAI as a productivity tool, but analysis, interpretation, and judgment must be your own.
+
+ 
+
+Part A- Data Analysis
+
+ Objective: analyze the evolution of the US capital-labor ratio and testing the relationship between factor endowments and trade performance using time-series data.
+
+Part 1: Data Acquisition
+
+Download annual data from 1960 to the latest available year from FRED (Federal Reserve Economic Data) for the following four variables.
+
+Real GDP: GDPC1 (Billions of Chained Dollars)
+Civilian Labor Force: CLF16OV (Thousands of Persons)
+Note: This series is Monthly. You must change the "Frequency" setting in FRED to "Annual" (using the "Average" aggregation method) before downloading.
+Real Domestic Private Investment (Capital Proxy): GPDIC1
+Correction: Use GPDIC1 (Real Gross Private Domestic Investment), not GPD1C1.
+Real Exports of Goods & Services: EXPGSC1
+Note: Use this "Real" series to match the inflation-adjusted units of your GDP and Investment data.
+Part 2: Data Calculation & Standardization
+
+Calculate the following two variables for each year. Pay close attention to units.
+
+Capital Deepening (Investment % of GDP):
+Real Domestic investment/Real GDP
+
+(Format as a percentage).
+
+Capital-Labor Ratio ($K/L$):
+Real Domestic Investment (Capital Proxy)/ Civilian Labor Force
+
+ 
+
+CRITICAL UNIT ADJUSTMENT:
+
+FRED reports Investment in Billions (e.g., 4,000 = $4 Trillion).
+FRED reports Labor Force in Thousands (e.g., 160,000 = 160 Million).
+To get a meaningful number (Dollars of Investment per Worker), you must normalize the units.
+Hint: Convert Investment to Dollars (multiply by $1,000,000,000$) and Labor Force to Persons (multiply by $1,000$). Alternatively, convert both to Millions before dividing.
+
+
+Part 3: Visualization
+
+Create a dual-axis chart (Line Chart) covering the full period:
+
+Left Axis: Capital Deepening (Investment as % of GDP).
+Right Axis: Capital-Labor Ratio ($K/L$).
+
+
+Part 4: Regression Analysis
+
+Run a simple linear regression:
+
+Y-Variable (Dependent): Real Exports (EXPGSC1)
+X-Variable (Independent): Capital-Labor Ratio ($K/L$)
+
+
+Part 5: Analytical Questions
+
+Regression Critique: Look at your regression results. Do you think this is a sensible regression? Specifically, explain the concept of a “Unit Root" or non-stationary data. Why might regressing two trending variables (like Exports and K/L) lead to misleading results (spurious correlation)?
+Future Outlook (Gen AI): Given the massive projected investment in Generative AI infrastructure (data centers, chips, energy grid), how do you expect the Capital as % of GDP and the Capital-Labor Ratio to evolve over the next 5–10 years? Will AI represent "Capital Deepening" (making workers more productive) or "Labor Displacement" (reducing the denominator)? Explain your reasoning.
+ 
+
+Part B – Practice the queries within Recursion Analyzer to gain some key facts about primary mortgage markets:
+1.(0.5 points) Find the active mortgage lenders and sellers to the GSEs (Fannie Mae, Freddie Mac) during vear 2025.
+a, For each seller to GSEs, find the total mortgage loan count and issuance balance to each of the GSEs. b. How many active sellers (lenders) to each of the two GSEs? Colow many actire slrs lenders) that sld morigsage loans to beth Gtsin d. How many actively sellers (lenders) that sold mortgage loans to ONLY one of the GSEs in 2025?
+2. (0.5 points) Find the total mortgage loan account and balance that are sold into Fannie Mae MBS in 2025 with private mortgage insurance (PMIs), through two approaches as below:
+a. Since there is a PMI indicator "Mortgage Insurance(Y/N)" provided for the GSE loans, please use either of the two filter, and
+b. Select those loans with Original LTV (or Issuance LTV) higher than 80 (%). List of all PMIs with loan count and total balance.
+3. (0.5 points) For all the mortgage loans delivered to Ginnie Mae MBS in 2025, please find the distribution in terms of the following: a. Original or Issuance loan balance; (for every $100k increment) b. Mortgage rate; (for every 0.50% increment) d. Original /lssuance LTV (Loan to Value) (for every 20% increment); and e. Original / Issuance FICO score (or credit score) (<=580, (580, 680), (680, 720), >720).
+Questions:
+Any notable observations?
+4.
+(0.5 point, fixed-income concept) Day count/Compounding question: There are two one-year $10,000 investments, assuming both are default-free investments:
+a. Investment I pays coupon of 6.00%, paying semi-annually with day-count of 30/360;
+b. Investment ll pays coupon of 6.10%, paying annually with day-count of Actual/365; You can purchase each investment at price of 100, or pay $10,000 upfront.
+L
+Which investment do you prefer? Why?
+L
