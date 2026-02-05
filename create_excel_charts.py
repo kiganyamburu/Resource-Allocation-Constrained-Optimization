@@ -84,31 +84,16 @@ def create_excel_with_charts():
 
     # =========================================================================
     # Sheet 2: Dual-Axis Chart (Capital Deepening & K/L Ratio)
-    # Normalize both series to 0-100 scale for comparison
+    # As per instructions: Left Axis = Capital Deepening (%), Right Axis = K/L Ratio ($)
     # =========================================================================
     ws_chart1 = wb.create_sheet("Dual-Axis Chart")
 
-    # Normalize both series to 0-100 scale so trends are comparable
-    cap_deep_min = df["Capital_Deepening_Pct"].min()
-    cap_deep_max = df["Capital_Deepening_Pct"].max()
-    kl_min = df["Capital_Labor_Ratio"].min()
-    kl_max = df["Capital_Labor_Ratio"].max()
-
-    df["Capital_Deepening_Normalized"] = (
-        (df["Capital_Deepening_Pct"] - cap_deep_min) / (cap_deep_max - cap_deep_min)
-    ) * 100
-    df["Capital_Labor_Ratio_Normalized"] = (
-        (df["Capital_Labor_Ratio"] - kl_min) / (kl_max - kl_min)
-    ) * 100
-
     # Headers with formatting
     ws_chart1["A1"] = "Year"
-    ws_chart1["B1"] = "Capital Deepening (Normalized)"
-    ws_chart1["C1"] = "Capital-Labor Ratio (Normalized)"
-    ws_chart1["D1"] = "Capital Deepening (%)"
-    ws_chart1["E1"] = "Capital-Labor Ratio ($)"
+    ws_chart1["B1"] = "Capital Deepening (%)"
+    ws_chart1["C1"] = "Capital-Labor Ratio ($)"
 
-    for col in range(1, 6):
+    for col in range(1, 4):
         cell = ws_chart1.cell(row=1, column=col)
         cell.fill = header_fill
         cell.font = header_font
@@ -117,46 +102,42 @@ def create_excel_with_charts():
 
     for i, row in enumerate(df.iterrows(), 2):
         idx, data = row
-        ws_chart1.cell(row=i, column=1, value=int(data["Year"])).border = thin_border
-        ws_chart1.cell(
-            row=i, column=2, value=data["Capital_Deepening_Normalized"]
-        ).border = thin_border
+        # Store year as STRING so it displays as category label on x-axis
+        ws_chart1.cell(row=i, column=1, value=str(int(data["Year"]))).border = (
+            thin_border
+        )
+        ws_chart1.cell(row=i, column=2, value=data["Capital_Deepening_Pct"]).border = (
+            thin_border
+        )
         ws_chart1.cell(row=i, column=2).number_format = "#,##0.00"
-        ws_chart1.cell(
-            row=i, column=3, value=data["Capital_Labor_Ratio_Normalized"]
-        ).border = thin_border
+        ws_chart1.cell(row=i, column=3, value=data["Capital_Labor_Ratio"]).border = (
+            thin_border
+        )
         ws_chart1.cell(row=i, column=3).number_format = "#,##0.00"
-        ws_chart1.cell(row=i, column=4, value=data["Capital_Deepening_Pct"]).border = (
-            thin_border
-        )
-        ws_chart1.cell(row=i, column=4).number_format = "#,##0.00"
-        ws_chart1.cell(row=i, column=5, value=data["Capital_Labor_Ratio"]).border = (
-            thin_border
-        )
-        ws_chart1.cell(row=i, column=5).number_format = "#,##0.00"
 
     # Adjust column widths
     ws_chart1.column_dimensions["A"].width = 8
-    ws_chart1.column_dimensions["B"].width = 28
-    ws_chart1.column_dimensions["C"].width = 28
-    ws_chart1.column_dimensions["D"].width = 22
-    ws_chart1.column_dimensions["E"].width = 22
+    ws_chart1.column_dimensions["B"].width = 22
+    ws_chart1.column_dimensions["C"].width = 22
 
     num_rows = len(df) + 1
 
-    # Create line chart with both normalized series on same scale
+    # Create PRIMARY line chart for Capital Deepening (LEFT AXIS)
     chart1 = LineChart()
-    chart1.title = "U.S. Capital Deepening and Capital-Labor Ratio (1960-Present)\nNormalized to 0-100 Scale for Comparison"
+    chart1.title = "U.S. Capital Deepening and Capital-Labor Ratio (1960-Present)"
     chart1.style = 10
     chart1.width = 20
     chart1.height = 12
-    chart1.y_axis.title = "Normalized Index (0-100)"
+    chart1.y_axis.title = "Capital Deepening (%)"
     chart1.x_axis.title = "Year"
-    chart1.y_axis.scaling.min = 0
-    chart1.y_axis.scaling.max = 100
 
-    # Add both normalized series to the same chart
-    data1 = Reference(ws_chart1, min_col=2, min_row=1, max_col=3, max_row=num_rows)
+    # X-axis category labels settings
+    chart1.x_axis.tickLblSkip = 5  # Show every 5th label
+    chart1.x_axis.tickMarkSkip = 5
+
+    # Add Capital Deepening data (primary/left axis)
+    data1 = Reference(ws_chart1, min_col=2, min_row=1, max_row=num_rows)
+    # Categories are the years in column A (row 2 to end, as row 1 is header)
     cats = Reference(ws_chart1, min_col=1, min_row=2, max_row=num_rows)
     chart1.add_data(data1, titles_from_data=True)
     chart1.set_categories(cats)
@@ -164,22 +145,36 @@ def create_excel_with_charts():
     # Style the first series (blue line) - Capital Deepening
     s1 = chart1.series[0]
     s1.graphicalProperties.line.solidFill = "1F77B4"
-    s1.graphicalProperties.line.width = 30000
+    s1.graphicalProperties.line.width = 25000
     s1.marker.symbol = "circle"
-    s1.marker.size = 6
+    s1.marker.size = 4
     s1.marker.graphicalProperties.solidFill = "1F77B4"
     s1.marker.graphicalProperties.line.solidFill = "1F77B4"
 
+    # Create SECONDARY line chart for K/L Ratio (RIGHT AXIS)
+    chart2 = LineChart()
+    chart2.y_axis.axId = 200
+    chart2.y_axis.title = "K/L Ratio ($)"
+
+    # Add K/L Ratio data (secondary/right axis)
+    data2 = Reference(ws_chart1, min_col=3, min_row=1, max_row=num_rows)
+    chart2.add_data(data2, titles_from_data=True)
+
     # Style the second series (red line) - K/L Ratio
-    s2 = chart1.series[1]
+    s2 = chart2.series[0]
     s2.graphicalProperties.line.solidFill = "D62728"
-    s2.graphicalProperties.line.width = 30000
+    s2.graphicalProperties.line.width = 25000
     s2.marker.symbol = "square"
-    s2.marker.size = 6
+    s2.marker.size = 4
     s2.marker.graphicalProperties.solidFill = "D62728"
     s2.marker.graphicalProperties.line.solidFill = "D62728"
 
-    ws_chart1.add_chart(chart1, "G2")
+    # Combine charts - secondary axis on right side
+    chart1.y_axis.crosses = "min"
+    chart2.y_axis.crosses = "max"
+    chart1 += chart2
+
+    ws_chart1.add_chart(chart1, "E2")
 
     # =========================================================================
     # Sheet 3: Regression Scatter Plot
