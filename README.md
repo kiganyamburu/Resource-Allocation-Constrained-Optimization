@@ -21,6 +21,8 @@ The analysis tests the intuition of the H-O model using real U.S. macroeconomic 
 ├── heckscher_ohlin_analysis.py   # Main analysis script
 ├── heckscher_ohlin_data.csv      # Downloaded/generated economic data
 ├── assignment_answers.md         # Complete analytical answers
+├── create_excel_charts.py        # Excel chart generator (openpyxl)
+├── create_excel_charts_v2.py     # Excel chart generator (xlsxwriter)
 ├── convert_to_docx.py            # Script to convert markdown to Word
 ├── instruction.txt               # Assignment instructions
 └── README.md                     # This file
@@ -37,6 +39,18 @@ The analysis tests the intuition of the H-O model using real U.S. macroeconomic 
 
 ```bash
 pip install pandas matplotlib statsmodels numpy
+```
+
+For Excel chart generation:
+
+```bash
+pip install openpyxl xlsxwriter
+```
+
+For Word document conversion:
+
+```bash
+pip install python-docx
 ```
 
 Optional (for FRED API access):
@@ -74,6 +88,26 @@ This script will:
 ```bash
 python convert_to_docx.py
 ```
+
+### Generate Excel Charts
+
+Using openpyxl:
+
+```bash
+python create_excel_charts.py
+```
+
+Or using xlsxwriter (recommended for better chart formatting):
+
+```bash
+python create_excel_charts_v2.py
+```
+
+Both scripts create an Excel file with:
+
+- Data sheet with all economic variables
+- Dual-axis chart (Capital Deepening vs Capital-Labor Ratio)
+- Scatter plot (Real Exports vs Capital-Labor Ratio with trendline)
 
 ## 📊 Data Sources
 
