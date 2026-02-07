@@ -155,3 +155,4 @@ This project is for educational purposes as part of an economics assignment on R
 
 - Federal Reserve Bank of St. Louis for FRED data access
 - Course instructors for the assignment framework
+- Course instructors for the assignment framework
